@@ -13,6 +13,7 @@ extension NSManagedObjectContext: Context {
         fetchRequest.sortDescriptors = request.sortDescriptor.map {[$0]}
         fetchRequest.fetchOffset = request.fetchOffset
         fetchRequest.fetchLimit = request.fetchLimit
+        fetchRequest.relationshipKeyPathsForPrefetching = request.prefetching
         let results = try self.fetch(fetchRequest)
         let typedResults = results.map {$0 as! T} 
         return typedResults

@@ -6,6 +6,7 @@ public struct FetchRequest<T: Entity>: Equatable {
     
     public let sortDescriptor: NSSortDescriptor?
     public let predicate: NSPredicate?
+    public let prefetching: [String]?
     public let fetchOffset: Int
     public let fetchLimit: Int
     let context: Context?
@@ -13,10 +14,11 @@ public struct FetchRequest<T: Entity>: Equatable {
     
     // MARK: - Init
     
-    public init(_ requestable: Requestable? = nil, sortDescriptor: NSSortDescriptor? = nil, predicate: NSPredicate? = nil, fetchOffset: Int = 0, fetchLimit: Int = 0) {
+    public init(_ requestable: Requestable? = nil, sortDescriptor: NSSortDescriptor? = nil, predicate: NSPredicate? = nil, prefetching:[String]? = nil, fetchOffset: Int = 0, fetchLimit: Int = 0) {
         self.context = requestable?.requestContext()
         self.sortDescriptor = sortDescriptor
         self.predicate = predicate
+        self.prefetching = prefetching
         self.fetchOffset = fetchOffset
         self.fetchLimit = fetchLimit
     }
@@ -54,7 +56,7 @@ public struct FetchRequest<T: Entity>: Equatable {
         return self
             .request(withPredicate: NSPredicate(format: "NOT (\(key) IN %@)", value))
     }
-
+    
     
     public func sorted(with sortDescriptor: NSSortDescriptor) -> FetchRequest<T> {
         return self
@@ -94,5 +96,5 @@ public struct FetchRequest<T: Entity>: Equatable {
 
 public func == <T>(lhs: FetchRequest<T>, rhs: FetchRequest<T>) -> Bool {
     return lhs.sortDescriptor == rhs.sortDescriptor &&
-    lhs.predicate == rhs.predicate
+        lhs.predicate == rhs.predicate
 }
